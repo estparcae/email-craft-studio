@@ -1,73 +1,131 @@
-# Welcome to your Lovable project
+# Email Craft Studio
 
-## Project info
+Professional email HTML generator with brand kit system, built with Next.js.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Project Overview
 
-## How can I edit this code?
+Email Craft Studio is a visual email builder that creates table-based, email-client-compatible HTML emails. It features a brand kit system, template library, and block-based email composition.
 
-There are several ways of editing your application.
+## Getting Started
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- Node.js 18+ & npm
+- [Install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to project directory
+cd email-craft-studio
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Technologies
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **React 18** - UI library
+- **shadcn/ui** - Component library (Radix UI + Tailwind CSS)
+- **Tailwind CSS** - Utility-first CSS
+- **TanStack React Query** - Server state management
+- **Vitest** - Testing framework
 
-## How can I deploy this project?
+## Development Commands
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```bash
+# Development server
+npm run dev
 
-## Can I connect a custom domain to my Lovable project?
+# Production build
+npm run build
 
-Yes, you can!
+# Start production server
+npm run start
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+# Run linter
+npm run lint
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+# Run tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+## Project Structure
+
+```
+email-craft-studio/
+├── src/
+│   ├── app/              # Next.js App Router pages
+│   │   ├── layout.tsx    # Root layout
+│   │   ├── page.tsx      # Home page
+│   │   └── providers.tsx # Client providers
+│   ├── components/       # React components
+│   │   ├── ui/          # shadcn/ui components
+│   │   └── *.tsx        # Feature components
+│   ├── context/         # React Context providers
+│   ├── core/            # Business logic
+│   │   ├── brandParser.ts
+│   │   ├── emailRenderer.ts
+│   │   ├── storage.ts
+│   │   ├── templates.ts
+│   │   └── compatibilityChecker.ts
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utilities
+│   ├── types/           # TypeScript definitions
+│   └── test/            # Test setup
+├── public/              # Static assets
+└── package.json
+```
+
+## Features
+
+- **Brand Kit System** - Manage colors, logos, and typography
+- **Block-Based Editor** - Compose emails with drag-and-drop blocks
+- **Template Library** - Pre-built email templates (newsletter, announcement, event)
+- **Live Preview** - Desktop and mobile preview modes
+- **Dark Mode Support** - Email-safe dark mode rendering
+- **Export Options** - HTML export with compatibility checks
+- **WCAG Compliance** - Automated contrast checking
+- **Email Client Testing** - Compatibility recommendations
+
+## Deployment
+
+This project can be deployed to:
+
+- **Vercel** (recommended for Next.js)
+- **Netlify**
+- **Any Node.js hosting platform**
+
+### Deploy to Vercel
+
+```bash
+npm install -g vercel
+vercel
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is private and proprietary.

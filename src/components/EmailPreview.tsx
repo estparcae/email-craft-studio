@@ -1,3 +1,5 @@
+"use client";
+
 import { useApp } from '@/context/AppContext';
 import { renderEmail } from '@/core/emailRenderer';
 import { DEFAULT_BRAND_KIT } from '@/types';
