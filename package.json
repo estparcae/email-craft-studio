@@ -15,6 +15,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.25",
     "@hookform/resolvers": "^3.10.0",
     "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-accordion": "^1.2.11",
@@ -45,6 +46,7 @@
     "@radix-ui/react-toggle-group": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@tanstack/react-query": "^5.83.0",
+    "ai": "^6.0.67",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -55,9 +57,11 @@
     "lucide-react": "^0.462.0",
     "next": "^15.1.6",
     "next-themes": "^0.3.0",
+    "openai": "^6.17.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
+    "react-dropzone": "^14.4.0",
     "react-hook-form": "^7.61.1",
     "react-resizable-panels": "^2.1.9",
     "recharts": "^2.15.4",

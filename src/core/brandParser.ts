@@ -187,6 +187,9 @@ export function createBrandKit(name: string, overrides?: Partial<BrandKit>): Bra
 // Safe font stacks for email
 export const SAFE_FONT_STACKS: Record<string, string> = {
   'System': "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+  'Inter': "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  'Poppins': "'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  'Roboto': "'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
   'Arial': "Arial, 'Helvetica Neue', Helvetica, sans-serif",
   'Georgia': "Georgia, 'Times New Roman', Times, serif",
   'Verdana': "Verdana, Geneva, sans-serif",
