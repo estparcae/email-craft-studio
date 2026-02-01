@@ -122,6 +122,7 @@ export function createNewEmail(name: string, brandKitId?: string, templateId?: s
     blocks: [],
     brandKitId,
     theme: 'light',
+    contentWidth: 600,
     templateId,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

@@ -209,6 +209,8 @@ export interface EmailDoc {
   blocks: EmailBlock[];
   brandKitId?: string;
   theme: 'light' | 'dark';
+  /** Ancho del contenido del email en px (p. ej. 600 para Gmail). Por defecto 600. */
+  contentWidth?: number;
   templateId?: string;
   createdAt: string;
   updatedAt: string;

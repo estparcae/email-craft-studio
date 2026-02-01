@@ -7,10 +7,11 @@ import { Monitor, Smartphone, Moon, Sun, RefreshCw, GripVertical } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 
-// Viewport limits por modo (px). Recomendado = vista típica Gmail/Outlook/Apple Mail.
-const VIEWPORT = {
-  desktop: { min: 480, recommended: 600, max: 800, label: 'Gmail/Outlook ~600px' },
-  mobile: { min: 320, recommended: 375, max: 428, label: 'iPhone/Android ~375px' },
+// Límites del ancho del email: min/max editables. Recomendado = vista típica Gmail.
+const EMAIL_WIDTH = { min: 320, max: 800 } as const;
+const GMAIL_LIMITS = {
+  desktop: { recommended: 600, label: 'Gmail escritorio ~600px' },
+  mobile: { recommended: 375, label: 'Gmail móvil ~375px' },
 } as const;
 
 export function EmailPreview() {
@@ -21,19 +22,18 @@ export function EmailPreview() {
     setPreviewMode,
     darkModePreview,
     setDarkModePreview,
+    updateEmail,
   } = useApp();
   
   const [refreshKey, setRefreshKey] = useState(0);
-  const limits = VIEWPORT[previewMode];
-  const [previewWidth, setPreviewWidth] = useState(limits.recommended);
   const [isDragging, setIsDragging] = useState(false);
   const startX = useRef(0);
   const startWidth = useRef(0);
   
-  // Al cambiar modo, resetear ancho al recomendado del modo
-  useEffect(() => {
-    setPreviewWidth(limits.recommended);
-  }, [previewMode, limits.recommended]);
+  // Ancho del email (definido en el documento)
+  const emailWidth = currentEmail?.contentWidth ?? 600;
+  const gmailLimit = GMAIL_LIMITS[previewMode];
+  const exceedsGmailLimit = emailWidth > gmailLimit.recommended;
   
   const brandKit = currentBrandKit || DEFAULT_BRAND_KIT;
   
@@ -45,21 +45,19 @@ export function EmailPreview() {
     });
   }, [currentEmail, brandKit, darkModePreview, refreshKey]);
   
-  const isOverflowingViewport = previewWidth > limits.recommended;
-  
   const handleResizeStart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     startX.current = e.clientX;
-    startWidth.current = previewWidth;
+    startWidth.current = emailWidth;
     setIsDragging(true);
-  }, [previewWidth]);
+  }, [emailWidth]);
   
   useEffect(() => {
-    if (!isDragging) return;
+    if (!isDragging || !currentEmail) return;
     const onMove = (e: MouseEvent) => {
       const delta = e.clientX - startX.current;
-      const next = Math.round(Math.min(limits.max, Math.max(limits.min, startWidth.current + delta)));
-      setPreviewWidth(next);
+      const next = Math.round(Math.min(EMAIL_WIDTH.max, Math.max(EMAIL_WIDTH.min, startWidth.current + delta)));
+      updateEmail({ ...currentEmail, contentWidth: next });
     };
     const onUp = () => {
       setIsDragging(false);
@@ -76,7 +74,7 @@ export function EmailPreview() {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     };
-  }, [isDragging, limits.min, limits.max]);
+  }, [isDragging, currentEmail, updateEmail]);
   
   // Apply dark mode simulation styles
   const darkModeStyles = darkModePreview ? `
@@ -98,6 +96,7 @@ export function EmailPreview() {
           margin: 0; 
           padding: 0; 
           font-family: Arial, sans-serif;
+          min-width: ${emailWidth}px !important;
         }
       </style>
       ${darkModeStyles}
@@ -180,11 +179,11 @@ export function EmailPreview() {
             <p>Selecciona un email para previsualizar</p>
           </div>
         ) : (
-          <div className="mx-auto relative flex flex-col items-center" style={{ width: previewWidth + 24 }}>
-            {/* Contenedor redimensionable con guía de viewport */}
+          <div className="mx-auto relative flex flex-col items-center" style={{ width: emailWidth + 24 }}>
+            {/* Contenedor: ancho del email (redimensionable) + guía Gmail */}
             <div 
               className="gmail-frame relative flex flex-col"
-              style={{ width: previewWidth }}
+              style={{ width: emailWidth }}
             >
               {/* Gmail toolbar simulation */}
               <div className="gmail-toolbar">
@@ -203,30 +202,30 @@ export function EmailPreview() {
                 </div>
               </div>
               
-              {/* Email content + guía de desborde */}
-              <div className="gmail-email-card overflow-hidden relative" style={{ maxWidth: previewWidth }}>
-                {/* Línea/margen de aviso: viewport típico del cliente (cuando el ancho actual lo supera) */}
-                {isOverflowingViewport && (
+              {/* Email content + guía cuando el ancho del email excede lo típico en Gmail */}
+              <div className="gmail-email-card overflow-hidden relative" style={{ maxWidth: emailWidth }}>
+                {/* Línea/margen de aviso: límite típico Gmail (cuando el ancho del email lo supera) */}
+                {exceedsGmailLimit && (
                   <>
                     <div
                       className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
                       style={{
-                        left: limits.recommended,
+                        left: gmailLimit.recommended,
                         background: 'repeating-linear-gradient(to bottom, hsl(var(--warning)) 0, hsl(var(--warning)) 4px, transparent 4px, transparent 8px)',
                         boxShadow: '0 0 0 1px hsl(var(--warning) / 0.5)',
                       }}
-                      title={limits.label}
+                      title={gmailLimit.label}
                     />
                     <div
                       className="absolute top-0 right-0 bottom-0 left-0 z-[5] pointer-events-none bg-warning/5"
-                      style={{ marginLeft: limits.recommended }}
-                      title="Zona que puede desbordar en clientes de correo"
+                      style={{ marginLeft: gmailLimit.recommended }}
+                      title="En Gmail suele verse a este ancho; tu email es más ancho y puede desbordar"
                     />
                     <div
                       className="absolute z-20 pointer-events-none text-[10px] font-medium text-warning whitespace-nowrap"
-                      style={{ left: limits.recommended + 6, top: 6 }}
+                      style={{ left: gmailLimit.recommended + 6, top: 6 }}
                     >
-                      {limits.label} — puede desbordar
+                      {gmailLimit.label} — puede desbordar en Gmail
                     </div>
                   </>
                 )}
@@ -236,6 +235,8 @@ export function EmailPreview() {
                   title="Email Preview"
                   className="w-full border-0 relative z-0"
                   style={{ 
+                    width: emailWidth,
+                    minWidth: emailWidth,
                     height: '600px',
                     minHeight: '400px',
                   }}
@@ -244,24 +245,24 @@ export function EmailPreview() {
               </div>
             </div>
             
-            {/* Handle para redimensionar (arrastrar) */}
+            {/* Handle para definir ancho del email (arrastrar) */}
             <div
               role="separator"
-              aria-label="Redimensionar vista previa"
+              aria-label="Definir ancho del email"
               onMouseDown={handleResizeStart}
               className="absolute top-0 bottom-0 w-6 flex items-center justify-center cursor-col-resize hover:bg-primary/10 rounded-r transition-colors group"
-              style={{ left: previewWidth - 2 }}
+              style={{ left: emailWidth - 2 }}
             >
               <div className="w-1 h-12 rounded-full bg-border group-hover:bg-primary/50 transition-colors flex items-center justify-center">
                 <GripVertical className="w-3 h-3 text-muted-foreground group-hover:text-primary" />
               </div>
             </div>
             
-            {/* Indicador de ancho actual */}
+            {/* Indicador: ancho del email + aviso si excede Gmail */}
             <p className="text-xs text-muted-foreground mt-2">
-              {previewWidth}px
-              {isOverflowingViewport && (
-                <span className="text-warning ml-1"> · Más ancho que {limits.label}</span>
+              Ancho del email: {emailWidth}px
+              {exceedsGmailLimit && (
+                <span className="text-warning ml-1"> · Excede {gmailLimit.label} (puede desbordar en Gmail)</span>
               )}
             </p>
           </div>

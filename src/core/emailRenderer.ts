@@ -511,6 +511,13 @@ export function renderEmail(
     return html;
   }).join('\n');
   
+  const contentWidthPx = doc.contentWidth ?? 600;
+  const contentWidthStr = `${contentWidthPx}px`;
+  // En preview: ancho fijo para que fondo y bloques se expandan al ancho del email
+  const innerTableStyle = options.forPreview
+    ? { backgroundColor: tokens.surface, width: contentWidthStr, minWidth: contentWidthStr }
+    : { backgroundColor: tokens.surface, maxWidth: contentWidthStr, width: '100%' };
+  
   const emailBody = `
     ${generatePreheader(doc.preheader || '')}
     
@@ -530,15 +537,11 @@ export function renderEmail(
         })}">
           <!-- Email Content -->
           <table 
-            width="600" 
+            width="${contentWidthPx}" 
             cellpadding="0" 
             cellspacing="0" 
             border="0" 
-            style="${style({
-              backgroundColor: tokens.surface,
-              maxWidth: '600px',
-              width: '100%',
-            })}"
+            style="${style(innerTableStyle)}"
           >
             ${blocksHtml}
           </table>
@@ -580,7 +583,7 @@ export function renderEmail(
     a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
     
     /* Mobile styles */
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: ${contentWidthPx + 20}px) {
       .email-container { width: 100% !important; max-width: 100% !important; }
       .responsive-table { width: 100% !important; }
       .mobile-padding { padding-left: 15px !important; padding-right: 15px !important; }
