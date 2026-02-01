@@ -1,3 +1,5 @@
+"use client";
+
 import { useApp } from '@/context/AppContext';
 import { templates, cloneTemplateBlocks } from '@/core/templates';
 import { Button } from '@/components/ui/button';

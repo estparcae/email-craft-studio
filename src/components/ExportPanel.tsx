@@ -1,3 +1,5 @@
+"use client";
+
 import { useApp } from '@/context/AppContext';
 import { checkCompatibility, checkContrasts, getDarkModeDefenses } from '@/core/compatibilityChecker';
 import { renderEmail, minifyHtml } from '@/core/emailRenderer';

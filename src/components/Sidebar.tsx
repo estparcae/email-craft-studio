@@ -1,3 +1,5 @@
+"use client";
+
 import { useApp } from '@/context/AppContext';
 import { BrandKitEditor } from './BrandKitEditor';
 import { EmailEditor } from './EmailEditor';

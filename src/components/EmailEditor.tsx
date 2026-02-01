@@ -1,3 +1,5 @@
+"use client";
+
 import { useApp } from '@/context/AppContext';
 import { EmailBlock, EmailBlockType } from '@/types';
 import { Button } from '@/components/ui/button';
